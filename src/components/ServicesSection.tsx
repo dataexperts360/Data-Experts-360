@@ -64,27 +64,41 @@ const services = [
 
 export const ServicesSection = () => {
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
+    <section className="py-24 relative overflow-hidden">
+      <div className="container mx-auto px-4 relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent text-sm font-medium mb-4">
-            Our Services
-          </div>
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-4">
-            Comprehensive <span className="gradient-text">Solutions</span> for Your Business
+          {/* Enhanced Badge Header */}
+     
+          {/* High-Impact Gradient Heading */}
+          <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight mb-6 leading-[1.1]">
+            Comprehensive <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#003366] via-[#004d99] to-cyan-500">
+              Solutions
+            </span> for Your Business
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+
+          {/* Refined Subtext */}
+          <p className="text-slate-500 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed">
             From web development to AI-powered analytics, we offer a full spectrum of 
             services designed to accelerate your digital transformation.
           </p>
+
+          {/* Modern Accent Line */}
+          <motion.div 
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: "80px", opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+            className="h-1.5 bg-gradient-to-r from-[#003366] to-cyan-400 mx-auto mt-10 rounded-full"
+          />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => (
             <ServiceCard
               key={service.href}
