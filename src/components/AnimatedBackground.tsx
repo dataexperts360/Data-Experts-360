@@ -1,3 +1,5 @@
+"use client"; // Required for Next.js App Router
+
 import { useEffect, useRef } from 'react';
 
 interface Particle {
@@ -10,10 +12,11 @@ interface Particle {
 }
 
 export const AnimatedBackground = () => {
+  // Initialize refs with proper types and null/empty values for Next.js/TS
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const mouseRef = useRef({ x: 0, y: 0 });
-  const animationRef = useRef<number>();
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -23,12 +26,15 @@ export const AnimatedBackground = () => {
     if (!ctx) return;
 
     const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      if (typeof window !== 'undefined') {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
     };
 
     const createParticles = () => {
       const particles: Particle[] = [];
+      // Calculate particle density based on screen size
       const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
       
       for (let i = 0; i < particleCount; i++) {
@@ -118,16 +124,19 @@ export const AnimatedBackground = () => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
 
+    // Initial setup
     resizeCanvas();
     createParticles();
     animate();
 
+    // Listeners
     window.addEventListener('resize', () => {
       resizeCanvas();
       createParticles();
     });
     window.addEventListener('mousemove', handleMouseMove);
 
+    // Cleanup to prevent memory leaks in Next.js
     return () => {
       if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);

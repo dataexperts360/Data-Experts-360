@@ -1,5 +1,8 @@
+"use client";
+
 import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, Menu, X, Send, 
@@ -51,27 +54,22 @@ const navItems: NavItem[] = [
   { label: 'Contact Us', href: '/contact' },
 ];
 
-// --- DESKTOP DROPDOWN ---
 const DesktopDropdown = ({ item, isActive }: { item: NavItem; isActive: boolean }) => {
   const [isOpen, setIsOpen] = useState(false);
   const hoverTimeout = useRef<NodeJS.Timeout | null>(null);
   const isServices = item.label === 'Our Services';
 
   const handleEnter = () => {
-    hoverTimeout.current = setTimeout(() => setIsOpen(true), 80);
+    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
+    setIsOpen(true);
   };
 
   const handleLeave = () => {
-    if (hoverTimeout.current) clearTimeout(hoverTimeout.current);
-    setIsOpen(false);
+    hoverTimeout.current = setTimeout(() => setIsOpen(false), 150);
   };
 
   return (
-    <div
-      className="relative"
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
+    <div className="relative" onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
       <button
         className={cn(
           "relative flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-all rounded-full outline-none",
@@ -99,12 +97,11 @@ const DesktopDropdown = ({ item, isActive }: { item: NavItem; isActive: boolean 
               {item.children?.map((child) => (
                 <Link
                   key={child.href}
-                  to={child.href}
+                  href={child.href}
                   className="flex items-start gap-4 p-3 rounded-xl hover:bg-secondary/60 group transition-all duration-300"
                 >
                   <motion.div
                     whileHover={{ scale: 1.08, rotate: 3 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
                     className="p-2.5 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 text-primary group-hover:from-primary group-hover:to-accent group-hover:text-white transition-all shadow-sm"
                   >
                     <child.icon className="w-4 h-4" />
@@ -131,7 +128,7 @@ export const Navbar = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [hoveredTab, setHoveredTab] = useState<string | null>(null);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
-  const location = useLocation();
+  const pathname = usePathname();
 
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? 'hidden' : 'unset';
@@ -145,53 +142,36 @@ export const Navbar = () => {
           animate={{ y: 0, opacity: 1 }}
           className="w-full max-w-7xl bg-white/80 backdrop-blur-sm border border-white/40 shadow-xl rounded-[2.5rem] px-6 h-14 lg:h-19 flex items-center justify-between"
         >
-          {/* LOGO */}
-          <Link to="/" className="flex items-center gap-3 shrink-0 group">
-          <motion.div
-  animate={{ rotateY: 360 }}
-  transition={{
-    repeat: Infinity,
-    duration: 20,
-    ease: "linear",
-  }}
-  whileHover={{ rotateY: 0 }}
-  className="w-10 h-10 flex items-center justify-center"
-  style={{
-    transformStyle: "preserve-3d",
-    perspective: 800,
-  }}
->
-  <img
-    src="logo.png"
-    alt="Data Experts 360 Logo"
-    className="w-7 h-7 object-contain drop-shadow-sm"
-  />
-</motion.div>
-
-            <span className="font-bold text-xl tracking-tight hidden sm:block">
+          <Link href="/" className="flex items-center gap-3 shrink-0 group">
+            <motion.div
+              animate={{ rotateY: 360 }}
+              transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
+              whileHover={{ rotateY: 0 }}
+              className="w-10 h-10 flex items-center justify-center"
+              style={{ transformStyle: "preserve-3d", perspective: 800 }}
+            >
+              <img src="/logo.png" alt="Logo" className="w-7 h-7 object-contain drop-shadow-sm" />
+            </motion.div>
+            <span className="font-bold text-primary text-xl tracking-tight hidden sm:block">
               Data Experts <span className="text-accent">360</span>
             </span>
           </Link>
 
-          {/* DESKTOP NAV */}
-          <div
-            className="hidden lg:flex items-center gap-1 relative"
-            onMouseLeave={() => setHoveredTab(null)}
-          >
+          <div className="hidden lg:flex items-center gap-1 relative" onMouseLeave={() => setHoveredTab(null)}>
             {navItems.map((item) => (
               <div key={item.label} className="relative">
                 {item.children ? (
-                  <DesktopDropdown
-                    item={item}
-                    isActive={item.children.some(c => location.pathname === c.href)}
+                  <DesktopDropdown 
+                    item={item} 
+                    isActive={item.children.some(c => pathname === c.href)} 
                   />
                 ) : (
                   <Link
-                    to={item.href!}
+                    href={item.href!}
                     onMouseEnter={() => setHoveredTab(item.label)}
                     className={cn(
                       "relative px-4 py-2 text-sm font-medium transition-colors rounded-full z-10 outline-none",
-                      location.pathname === item.href ? "text-primary font-bold" : "text-foreground/70 hover:text-primary"
+                      pathname === item.href ? "text-primary font-bold" : "text-foreground/70 hover:text-primary"
                     )}
                   >
                     {hoveredTab === item.label && (
@@ -208,17 +188,14 @@ export const Navbar = () => {
             ))}
           </div>
 
-          {/* DESKTOP CTA */}
           <div className="hidden lg:block">
             <Button asChild className="rounded-full bg-gradient-to-r from-primary to-accent hover:shadow-primary/40 shadow-lg transition-all active:scale-95 hover:-translate-y-0.5">
-              <Link to="/contact" className="gap-2">
-                <Send className="w-4 h-4" />
-                Request a Proposal
+              <Link href="/contact" className="gap-2">
+                <Send className="w-4 h-4" /> Request a Proposal
               </Link>
             </Button>
           </div>
 
-          {/* MOBILE TOGGLE */}
           <button
             onClick={() => setIsMobileOpen(true)}
             className="lg:hidden p-3 rounded-3xl bg-secondary/50 text-primary hover:bg-secondary transition-all active:scale-90"
@@ -228,7 +205,6 @@ export const Navbar = () => {
         </motion.nav>
       </div>
 
-      {/* MOBILE DRAWER */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
@@ -237,61 +213,39 @@ export const Navbar = () => {
           >
             <motion.div
               initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 220 }}
               className="absolute right-0 top-0 bottom-0 w-full max-w-sm bg-white shadow-2xl flex flex-col p-6 overflow-y-auto"
             >
               <div className="flex items-center justify-between mb-10">
                 <div className="flex items-center gap-2">
-                 <img src="logo.png" alt="Data Experts 360 Logo" className="w-8 h-8" />
+                  <img src="/logo.png" alt="Logo" className="w-8 h-8" />
                   <span className="font-semibold text-sm">Menu</span>
                 </div>
-                <button
-                  onClick={() => setIsMobileOpen(false)}
-                  className="p-2.5 rounded-full bg-secondary/80 text-foreground hover:rotate-90 transition-transform"
-                >
+                <button onClick={() => setIsMobileOpen(false)} className="p-2.5 rounded-full bg-secondary/80 text-foreground hover:rotate-90 transition-transform">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
               <div className="flex flex-col gap-3">
                 {navItems.map((item, i) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
+                  <motion.div key={item.label} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}>
                     {item.children ? (
                       <div className="space-y-2">
                         <button
                           onClick={() => setExpandedItem(expandedItem === item.label ? null : item.label)}
                           className={cn(
                             "flex items-center justify-between w-full p-4 rounded-2xl font-semibold text-sm transition-all",
-                            expandedItem === item.label ? "bg-primary text-white shadow-lg shadow-primary/20" : "bg-secondary/40"
+                            expandedItem === item.label ? "bg-primary text-white shadow-lg" : "bg-secondary/40"
                           )}
                         >
                           {item.label}
-                          <ChevronDown className={cn("w-5 h-5 transition-transform duration-300", expandedItem === item.label && "rotate-180")} />
+                          <ChevronDown className={cn("w-5 h-5 transition-transform", expandedItem === item.label && "rotate-180")} />
                         </button>
-
                         <AnimatePresence>
                           {expandedItem === item.label && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden grid gap-2 pl-2"
-                            >
+                            <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden grid gap-2 pl-2">
                               {item.children.map((child) => (
-                                <Link
-                                  key={child.href}
-                                  to={child.href}
-                                  onClick={() => setIsMobileOpen(false)}
-                                  className="flex items-center gap-4 p-4 rounded-2xl bg-secondary/20 active:bg-secondary/40 transition-colors"
-                                >
-                                  <div className="p-2 rounded-xl bg-white text-primary shadow-sm">
-                                    <child.icon className="w-5 h-5" />
-                                  </div>
+                                <Link key={child.href} href={child.href} onClick={() => setIsMobileOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl bg-secondary/20 transition-colors">
+                                  <div className="p-2 rounded-xl bg-white text-primary shadow-sm"><child.icon className="w-5 h-5" /></div>
                                   <span className="text-[13px] font-semibold">{child.label}</span>
                                 </Link>
                               ))}
@@ -300,13 +254,8 @@ export const Navbar = () => {
                         </AnimatePresence>
                       </div>
                     ) : (
-                      <Link
-                        to={item.href!}
-                        onClick={() => setIsMobileOpen(false)}
-                        className="flex items-center justify-between p-4 rounded-2xl bg-secondary/40 font-semibold text-sm active:scale-[0.98] transition-transform"
-                      >
-                        {item.label}
-                        <ArrowRight className="w-4 h-4 opacity-30" />
+                      <Link href={item.href!} onClick={() => setIsMobileOpen(false)} className="flex items-center justify-between p-4 rounded-2xl bg-secondary/40 font-semibold text-sm">
+                        {item.label} <ArrowRight className="w-4 h-4 opacity-30" />
                       </Link>
                     )}
                   </motion.div>
@@ -314,10 +263,9 @@ export const Navbar = () => {
               </div>
 
               <div className="mt-auto pt-10">
-                <Button asChild className="w-full py-7 rounded-2xl text-base font-bold bg-gradient-to-r from-primary to-accent shadow-xl shadow-primary/30">
-                  <Link to="/contact" onClick={() => setIsMobileOpen(false)} className="gap-2">
-                    <Send className="w-5 h-5" />
-                    Request Proposal
+                <Button asChild className="w-full py-7 rounded-2xl text-base font-bold bg-gradient-to-r from-primary to-accent shadow-xl">
+                  <Link href="/contact" onClick={() => setIsMobileOpen(false)} className="gap-2">
+                    <Send className="w-5 h-5" /> Request Proposal
                   </Link>
                 </Button>
               </div>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 import { ArrowUpRight, LucideIcon } from 'lucide-react';
 
@@ -30,7 +30,7 @@ export const ServiceCard = ({ icon: Icon, title, description, href, index = 0 }:
       className="group relative h-full"
     >
       <Link
-        to={href}
+        href={href}
         className="block relative h-full p-8 rounded-[2.5rem] bg-white border border-slate-100/50 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] transition-all duration-500 hover:shadow-[0_40px_80px_-15px_rgba(0,51,102,0.15)] hover:-translate-y-4 overflow-hidden flex flex-col"
       >
         {/* Top Branding Accent Bar */}
@@ -71,7 +71,7 @@ export const ServiceCard = ({ icon: Icon, title, description, href, index = 0 }:
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400 group-hover:text-[#003366] transition-colors">
               Service Details
             </span>
-            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-cyan-400 group-hover:text-white transition-all duration-300">
+            <div className="w-8 h-8 text-primary rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-cyan-400 group-hover:text-white transition-all duration-300">
               <ArrowUpRight className="w-4 h-4" />
             </div>
           </div>

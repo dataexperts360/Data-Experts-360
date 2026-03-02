@@ -1,0 +1,103 @@
+﻿
+> data-experts-360@0.1.0 build
+> next build
+
+Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+node.exe : 
+Browserslist: 
+browsers data 
+(caniuse-lite) is 7 
+months old. Please 
+run:
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" "C:
+\Users\A\AppData\Roam
+ing\npm/ ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Browser   
+ slist: b...ld. P    
+lease run::Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  npx update-browsers
+list-db@latest
+  Why you should do 
+it regularly: https:/
+/github.com/browsersl
+ist/update-db#readme
+Γ£ô Compiled successfully in 14.4s
+  Skipping validation of types
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/11) ...
+  Generating static pages using 7 workers (2/11) 
+  Generating static pages using 7 workers (5/11) 
+  Generating static pages using 7 workers (8/11) 
+Error occurred 
+prerendering page 
+"/". Read more: https
+://nextjs.org/docs/me
+ssages/prerender-erro
+r
+TypeError: Cannot 
+read properties of 
+undefined (reading 'R
+eactCurrentBatchConfi
+g')
+    at b.exports (C:\
+Users\A\Desktop\Data-
+Experts-360\.next\ser
+ver\chunks\ssr\_5e1d4
+6f5._.js:1:14351)
+    at <unknown> (C:\
+Users\A\Desktop\Data-
+Experts-360\.next\ser
+ver\chunks\ssr\_5e1d4
+6f5._.js:386:64879)
+    at module 
+evaluation (C:\Users\
+A\Desktop\Data-Expert
+s-360\.next\server\ch
+unks\ssr\_5e1d46f5._.
+js:386:67421)
+    at 
+instantiateModule (C:
+\Users\A\Desktop\Data
+-Experts-360\.next\se
+rver\chunks\ssr\[turb
+opack]_runtime.js:740
+:9)
+    at getOrInstantia
+teModuleFromParent (C
+:\Users\A\Desktop\Dat
+a-Experts-360\.next\s
+erver\chunks\ssr\[tur
+bopack]_runtime.js:76
+3:12)
+    at Context.common
+JsRequire [as r] (C:\
+Users\A\Desktop\Data-
+Experts-360\.next\ser
+ver\chunks\ssr\[turbo
+pack]_runtime.js:249:
+12) {
+  digest: '817673730'
+}
+Export encountered 
+an error on /page: 
+/, exiting the build.
+Γ¿» Next.js build 
+worker exited with 
+code: 1 and signal: 
+null
