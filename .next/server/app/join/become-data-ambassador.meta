@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/join/layout,_N_T_/join/become-data-ambassador/layout,_N_T_/join/become-data-ambassador/page,_N_T_/join/become-data-ambassador"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/join/become-data-ambassador/__PAGE__",
+    "/join/become-data-ambassador",
+    "/join",
+    "/_index",
+    "/_head"
+  ]
+}
