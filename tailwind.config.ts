@@ -2,7 +2,7 @@ import type { Config } from "tailwindcss";
 
 export default {
   // Forced Light Mode: darkMode set to false ensures system preferences are ignored
-  darkMode: false, 
+ 
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
